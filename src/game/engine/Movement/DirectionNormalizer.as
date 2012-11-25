@@ -1,24 +1,22 @@
-package game.engine 
+package game.engine.Movement
 {
 	import flash.display.Bitmap;
-	import flash.display.Stage;
-	import flash.geom.Point;
-	import obstacle.ship.Ship;
+	import game.engine.Object.Ship;
 	/**
 	 * This class controls the placement of the ship image based on it's direction
 	 * Since all images are placed based on the top left corner as the image is rotated it will change it's position
 	 * The Ships have an absolute X and Y value that is the point at the middle of the image and this class
 	 * normalizes their position on the screen based on their direction and x and y absolute coordinates.
-	 * 
+	 *
 	 * "On my home planet they tried to Normalize me... That was the first planet I leveled once I put together my fleet. Hah!"
 	 * Krasmak the Cruel
-	 * 
+	 *
 	 * @author William Drescher
-	 * 
+	 *
 	 * Copyright (c) 2012 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
 	 */
-	public class DirectionNormalizer 
+	public class DirectionNormalizer
 	{
 		public function DirectionNormalizer() {}
 		
@@ -70,7 +68,8 @@ package game.engine
 					image.x = absoluteX + (image.width / 2);
 					image.y = absoluteY;
 					image.rotation = 135;
-				break;			}
+				break;
+			}
 		}
 			
 	}

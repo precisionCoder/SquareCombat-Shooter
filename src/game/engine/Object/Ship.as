@@ -1,8 +1,8 @@
-package obstacle.ship
+package game.engine.Object
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.Stage;
+	import flash.display.Sprite;
 	
 	/**
 	 * The ship class is a superclass inherited by both enemy and hero ships,
@@ -12,54 +12,41 @@ package obstacle.ship
 	 * -Krasmak the Cruel
 	 *
 	 * @author William Drescher
-	 * 
+	 *
 	 * Copyright (c) 2012 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
 	 */
-	public class Ship
+	public class Ship extends GameObject
 	{
 		protected var health:int;
 		protected var speed:uint;
 		protected var dead:Boolean;
-		protected var image:Bitmap;
-		protected var imageData:BitmapData;
-		protected var stage:Stage;
 		protected var absoluteX:uint;
 		protected var absoluteY:uint;
 		protected var direction:String;
 		
-		public function Ship(newImage:Bitmap, newHealth:uint, newSpeed:uint, newStage:Stage)
+		public function Ship(image:Bitmap, health:uint, speed:uint, parent:Sprite)
 		{
-			image = newImage;
-			imageData = newImage.bitmapData;
-			health = newHealth;
-			speed = newSpeed;
+			super(image, parent);
+			this.health = health;
+			this.speed = speed;
 			dead = false;
-			stage = newStage;
 		}
 		
 		//Ship takes damage, triggers death if hp drop to 0 or less
-		public function takeDamage(newDamage:int):void
+		public function takeDamage(damage:int):void
 		{
-			health -= newDamage;
+			health -= damage;
 			if (health <= 0)
 			{
+				health = 0;
 				setDead(true);
 			}
 		}
 		
 		//Accessors and mutators
 		
-		//Image
-		public function getImage():Bitmap
-		{
-			return image;
-		}
 		
-		public function setImage(newImage:Bitmap):void
-		{
-			image = newImage;
-		}
 		
 		//Health
 		public function getHealth():uint
@@ -67,9 +54,9 @@ package obstacle.ship
 			return health;
 		}
 		
-		public function setHealth(newHealth:uint):void
+		public function setHealth(health:uint):void
 		{
-			health = newHealth;
+			this.health = health;
 		}
 		
 		//Speed
@@ -78,9 +65,9 @@ package obstacle.ship
 			return speed;
 		}
 		
-		public function setSpeed(newSpeed:uint):void
+		public function setSpeed(speed:uint):void
 		{
-			speed = newSpeed;
+			this.speed = speed;
 		}
 		
 		//Dead
@@ -89,9 +76,9 @@ package obstacle.ship
 			return dead;
 		}
 		
-		public function setDead(newDead:Boolean):void
+		public function setDead(dead:Boolean):void
 		{
-			dead = newDead;
+			this.dead = dead;
 		}
 		
 		//Direction
@@ -100,21 +87,15 @@ package obstacle.ship
 			return direction;
 		}
 		
-		public function setDirection(newDirection:String):void
+		public function setDirection(direction:String):void
 		{
-			direction = newDirection;
-		}
-		
-		//Stage
-		public function setStage(newStage:Stage):void
-		{
-			stage = newStage;
+			this.direction = direction;
 		}
 		
 		//AbsoluteX
-		public function setAbsoluteX(newAbsoluteX:uint):void
+		public function setAbsoluteX(absoluteX:uint):void
 		{
-			absoluteX = newAbsoluteX;
+			this.absoluteX = absoluteX;
 		}
 		
 		public function getAbsoluteX():uint
@@ -123,15 +104,16 @@ package obstacle.ship
 		}
 		
 		//AbsoluteY
-		public function setAbsoluteY(newAbsoluteY:uint):void
+		public function setAbsoluteY(absoluteY:uint):void
 		{
-			absoluteY = newAbsoluteY;
+			this.absoluteY = absoluteY;
 		}
 		
 		public function getAbsoluteY():uint
 		{
 			return absoluteY
 		}
+		
 	}
 
 }

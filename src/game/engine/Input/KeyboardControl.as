@@ -1,34 +1,38 @@
-package game.engine
+package game.engine.Input
 {
+	import flash.display.Stage;
+	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
-	import flash.display.Sprite;
-	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import obstacle.bullet.Bullet;
-	import obstacle.ship.*;
+	import game.engine.Main.ShooterGameManager;
+	import game.engine.Movement.HeroMovement;
+	import game.engine.Object.Bullet;
+	import game.engine.Object.HeroShip;
+	import game.engine.Screen.ScreenManager;
 	
 	/**
 	 * This class controls movement for the player using the keyboard as an input
 	 * The Controls are the arrow keys for movement and space to fire
 	 * By setting flags for arrows it allows multiple keys to be used simultaneously
 	 * to direct the ship.
-	 * 
+	 *
 	 * "Control me! Me! That is a feat no one has ever managed"
 	 * -Krasmak the Cruel
-	 * 
+	 *
 	 * @author William Drescher
-	 * 
+	 *
 	 * Copyright (c) 2012 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
 	 */
 	public class KeyboardControl
-	{		
+	{
 		//Movement Flags
 		private var leftArrow:Boolean = false;
 		private var rightArrow:Boolean = false;
@@ -38,8 +42,10 @@ package game.engine
 		
 		//Other tools
 		private var heroShip:HeroShip;
-		private var heroDetector:CollisionDetector;
+		private var screenManager:ScreenManager;
 		private var heroMovement:HeroMovement;
+		private var shooterGameManager:ShooterGameManager;
+		private var gameArea:Sprite;
 		private var stage:Stage;
 		
 		//Bullet Image
@@ -49,33 +55,52 @@ package game.engine
 		
 		//Timer
 		private var fireTimer:Timer; //causes delay between fires
+		private var pauseTimer:Timer;
 		private var canFire:Boolean = true; //can you fire a bullet
+		private var canPause:Boolean = true;
+		private var paused:Boolean = false;
 		
-		public function KeyboardControl(heroShip:HeroShip, collisionDetector:CollisionDetector, stage:Stage)
+		public function KeyboardControl(heroShip:HeroShip, screenManager:ScreenManager, gameArea:Sprite, stage:Stage, shooterGameManager:ShooterGameManager)
 		{
 			this.heroShip = heroShip;
-			this.heroDetector = collisionDetector;
-			this.heroMovement = new HeroMovement(heroShip);
-			this.stage = stage;			
+			this.screenManager = screenManager;
+			this.heroMovement = new HeroMovement(heroShip, screenManager);
+			this.gameArea = gameArea;
+			this.stage = stage;
+			this.shooterGameManager = shooterGameManager;
 		}
 		
-		//Adds the movement event listeners to the stage
+		//Adds the movement event listeners to the game area
 		public function addMovementHandlers(stage:Stage):void
-		{		
+		{
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyHit);
 			stage.addEventListener(KeyboardEvent.KEY_UP, noKeyHit);
 			stage.addEventListener(Event.ENTER_FRAME, moveShip);
-			fireTimer = new Timer(300, 1);
+			fireTimer = new Timer(400, 1);
 			fireTimer.addEventListener(TimerEvent.TIMER, fireTimerHandler, false, 0, true)
+			pauseTimer = new Timer(400, 1);
+			pauseTimer.addEventListener(TimerEvent.TIMER, pauseTimerHandler, false, 0, true)
 		}
 		
-		//Removes the movement event listeners from the stage
+		//Removes the movement event listeners from the game area
 		public function removeMovementHandlers(stage:Stage):void
 		{
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyHit);
 			stage.removeEventListener(KeyboardEvent.KEY_UP, noKeyHit);
 			stage.removeEventListener(Event.ENTER_FRAME, moveShip);
 			stage.removeEventListener(TimerEvent.TIMER, fireTimerHandler);
+			
+			resetFlags();
+		}
+		
+		private function resetFlags():void
+		{
+			//Resetting flags avoids a bug when the event listeners are added again
+			leftArrow = false;
+			rightArrow = false;
+			upArrow = false;
+			downArrow = false;
+			space = false;
 		}
 		
 		//Sets the flags for the various keys
@@ -85,23 +110,53 @@ package game.engine
 			//Primarily movement but also shooting
 			switch (event.keyCode)
 			{
-				case Keyboard.SPACE: 
-					if (canFire)
+				case 80:
+					if (canPause)
+					{
+						if (paused)
+						{
+							paused = false;
+							shooterGameManager.unpauseGame();
+						}
+						else
+						{
+							paused = true;
+							shooterGameManager.pauseGame();
+							resetFlags();
+						}
+						canPause = false;
+						pauseTimer.start();
+					}
+					break;
+				case Keyboard.SPACE:
+					if (canFire && !paused)
 					{
 						space = true;
 					}
 					break;
-				case Keyboard.RIGHT: 
-					rightArrow = true;
+				case Keyboard.RIGHT:
+					if (!paused)
+					{
+						rightArrow = true;
+					}
 					break;
-				case Keyboard.LEFT: 
-					leftArrow = true;
+				case Keyboard.LEFT:
+					if (!paused)
+					{
+						leftArrow = true;
+					}
 					break;
-				case Keyboard.UP: 
-					upArrow = true;
+				case Keyboard.UP:
+					if (!paused)
+					{
+						upArrow = true;
+					}
 					break;
-				case Keyboard.DOWN: 
-					downArrow = true;
+				case Keyboard.DOWN:
+					if (!paused)
+					{
+						downArrow = true;
+					}
 					break;
 			}
 		}
@@ -112,19 +167,19 @@ package game.engine
 		{
 			switch (event.keyCode)
 			{
-				case Keyboard.RIGHT: 
+				case Keyboard.RIGHT:
 					rightArrow = false;
 					break;
-				case Keyboard.LEFT: 
+				case Keyboard.LEFT:
 					leftArrow = false;
 					break;
-				case Keyboard.UP: 
+				case Keyboard.UP:
 					upArrow = false;
 					break;
-				case Keyboard.DOWN: 
+				case Keyboard.DOWN:
 					downArrow = false;
 					break;
-				case Keyboard.SPACE: 
+				case Keyboard.SPACE:
 					space = false;
 					break;
 			}
@@ -135,43 +190,48 @@ package game.engine
 		{
 			if (upArrow && !leftArrow && !rightArrow)
 			{
-				heroMovement.goUp(heroDetector);
+				heroMovement.goUp(screenManager);
 			}
 			if (upArrow && leftArrow && !rightArrow)
 			{
-				heroMovement.goUpLeft(heroDetector);
+				heroMovement.goUpLeft(screenManager);
 			}
 			if (upArrow && rightArrow && !leftArrow)
 			{
-				heroMovement.goUpRight(heroDetector);
+				heroMovement.goUpRight(screenManager);
 			}
 			if (downArrow && !leftArrow && !rightArrow)
 			{
-				heroMovement.goDown(heroDetector);
+				heroMovement.goDown(screenManager);
 			}
 			if (downArrow && leftArrow && !rightArrow)
 			{
-				heroMovement.goDownLeft(heroDetector);
+				heroMovement.goDownLeft(screenManager);
 			}
 			if (downArrow && rightArrow && !leftArrow)
 			{
-				heroMovement.goDownRight(heroDetector);
+				heroMovement.goDownRight(screenManager);
 			}
 			if (leftArrow && !upArrow && !downArrow)
 			{
-				heroMovement.goLeft(heroDetector);
+				heroMovement.goLeft(screenManager);
 			}
 			if (rightArrow && !upArrow && !downArrow)
 			{
-				heroMovement.goRight(heroDetector);
+				heroMovement.goRight(screenManager);
 			}
 			if (space && canFire)
 			{
-				var heroBullet:Bullet = new Bullet(heroShip, 5, 7, bulletImage, stage, heroDetector);
+				//Clone the image and use it to make a new bullet
+				var bulletImageData:BitmapData = bulletImage.bitmapData;
+				var myClone:BitmapData = bulletImageData.clone();
+				var myBulletClone:Bitmap = new Bitmap(myClone);
+				var heroBullet:Bullet = new Bullet(5, 7, myBulletClone, gameArea, heroShip.getDirection());
+				screenManager.addBulletToScreen(heroBullet);
 				canFire = false;
 				
 				//Starts the fire delay to prevent the ship from constantly shooting
-				fireTimer.start(); 
+				fireTimer.start();
 			}
 		}
 		
@@ -179,6 +239,11 @@ package game.engine
 		private function fireTimerHandler(e:TimerEvent):void
 		{
 			canFire = true;
+		}
+		
+		private function pauseTimerHandler(e:TimerEvent):void
+		{
+			canPause = true;
 		}
 	
 	}
