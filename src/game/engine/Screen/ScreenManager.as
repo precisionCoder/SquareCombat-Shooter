@@ -64,7 +64,7 @@ package game.engine.Screen
 				enemy.move(heroShip, enemy);
 				if (collisionDetector.checkForCollisions(heroShip, enemy))
 				{
-					heroShip.takeDamage(10);
+					heroShip.takeDamage(1);
 					enemy.takeDamage(10);
 					if (enemy.getDead())
 					{

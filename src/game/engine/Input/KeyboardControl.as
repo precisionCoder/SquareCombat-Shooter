@@ -226,6 +226,9 @@ package game.engine.Input
 				var bulletImageData:BitmapData = bulletImage.bitmapData;
 				var myClone:BitmapData = bulletImageData.clone();
 				var myBulletClone:Bitmap = new Bitmap(myClone);
+				myBulletClone.scaleX = .5;
+				myBulletClone.scaleY = .5;
+				
 				var heroBullet:Bullet = new Bullet(5, 7, myBulletClone, gameArea, heroShip.getDirection());
 				screenManager.addBulletToScreen(heroBullet);
 				canFire = false;

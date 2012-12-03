@@ -21,7 +21,7 @@ package game.engine.Screen
 		{
 			for each (var enemyShip:EnemyShip in enemyShipArray)
 			{
-				heroShip.takeDamage(10);
+				heroShip.takeDamage(1);
 				enemyShip.takeDamage(10);
 				if (enemyShip.getDead())
 				{

@@ -42,7 +42,7 @@ package game.engine.Main
 		private var enemyImage:Bitmap = new enemyEmbedImage();
 		
 		//Add hero image
-		[Embed(source="../../images/Hero_Ship.png")]
+		[Embed(source="../../images/Custom_Spaceship.png")]
 		private var heroEmbedImage:Class;
 		private var heroImage:Bitmap = new heroEmbedImage();
 		
@@ -65,10 +65,12 @@ package game.engine.Main
 		private var gameInitialized:Boolean;
 		private var pauseMessage:TextField;
 		private var difficulty:Number;
+		private var lifeArray:Array;
 		
 		public function ShooterGameManager(stage:Stage)
 		{
 			this.stage = stage;
+			lifeArray = new Array();
 			gameCollisionDetector = new CollisionDetector();
 			screenManager = new ScreenManager();
 			gameInitialized = false;
@@ -115,7 +117,7 @@ package game.engine.Main
 		private function initPlayer():void
 		{
 			//Create player
-			heroShip = new HeroShip(heroImage, 50, 2, gameArea);
+			heroShip = new HeroShip(heroImage, 5, 2, gameArea);
 			var heroX:uint = Math.round((gameArea.width - (heroImage.width / 2)) / 2);
 			var heroY:uint = Math.round((gameArea.height - (heroImage.height / 2)) / 2);
 			heroShip.setAbsoluteX(heroX);
@@ -193,7 +195,37 @@ package game.engine.Main
 				gameRunning = false;
 			
 			//Adds the top bar items
-			healthBar.text = "Life: " + heroShip.getHealth();
+			healthBar.text = "Lives:";
+			var lives:int = heroShip.getHealth();
+			var lifePosition:int = healthBar.width;
+			
+			if (lifeArray.length != heroShip.getHealth())
+			{
+				//Remove old life images
+				for (var i:int = 0; i < lifeArray.length; i++)
+				{
+					var image:Bitmap = lifeArray[i];
+					screenArea.removeChild(image);
+				}
+				
+				lifeArray = new Array();
+				
+				//Add life images
+				for (i = 0; i < lives; i++)
+				{
+					var heroImageData:BitmapData = heroShip.getImage().bitmapData;
+					var myClone:BitmapData = heroImageData.clone();
+					var lifeImage:Bitmap = new Bitmap(myClone);
+					lifeImage.width = lifeImage.width / 1.5;
+					lifeImage.height = lifeImage.height / 1.5;
+					lifeImage.x = lifePosition;
+					lifeArray.push(lifeImage);
+					screenArea.addChild(lifeImage);
+					lifePosition += lifeImage.width;
+				}
+				
+			}
+			
 			scoreBar.text = "Score: " + heroShip.getScore();
 			
 			if (gameRunning)
@@ -210,7 +242,7 @@ package game.engine.Main
 			var enemyImageData:BitmapData = enemyImage.bitmapData;
 			var myClone:BitmapData = enemyImageData.clone();
 			var myEnemyClone:Bitmap = new Bitmap(myClone);
-			var enemyShip:EnemyShip = new EnemyShip(myEnemyClone, Math.round(difficulty), Math.round(difficulty), gameArea);
+			var enemyShip:EnemyShip = new EnemyShip(myEnemyClone, 5, Math.round(difficulty), gameArea);
 			var spawnLocation:Point = chooseSpawnPoint();
 			enemyShip.addToScreen(spawnLocation.x, spawnLocation.y);
 			screenManager.addEnemyShipToScreen(enemyShip);
@@ -266,7 +298,7 @@ package game.engine.Main
 		private function resetPlayer(heroShip:HeroShip, gameArea:Sprite):void
 		{
 			//Create player
-			heroShip.setHealth(50);
+			heroShip.setHealth(5);
 			heroShip.setSpeed(5);
 			heroShip.setDead(false);
 			heroShip.setScore(0);

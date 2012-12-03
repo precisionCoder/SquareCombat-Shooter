@@ -51,7 +51,7 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			gameEngine = new ShooterGameManager(stage);
-			gameEngine.startGame(1500);
+			gameEngine.startGame(1000);
 		}
 	}
 
