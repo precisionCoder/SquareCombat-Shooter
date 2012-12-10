@@ -30,11 +30,8 @@ package game.engine.Screen
 		}
 		
 		/**
-		 * Check all of the objects for collisions with the hero's ship
-		 * If a collision is found deal damage to both ships,
-		 * if the enemy ship is destroyed remove it and add to the score of the hero
-		 * will return true if the ship collides with either a ship or the edge of the
-		 * screen to prevent the ship from moving further in that direction
+		 * Check all of the enemy ships for collisions with the hero's ship
+		 * will return true if the heroShip collides with a ship
 		 */
 		public function checkForShipCollisions(heroShip:HeroShip, screenManager:ScreenManager):Boolean
 		{
@@ -63,7 +60,7 @@ package game.engine.Screen
 		public function checkIfObjectIsOutOfBounds(x:int, y:int, image:Bitmap, gameArea:Sprite):Boolean
 		{
 			var outOfBounds:Boolean = false;
-
+			
 			//Checks if image is out of bounds on the x coordinate
 			if (x > (image.stage.stageWidth - (image.width / 2)))
 			{
@@ -91,14 +88,17 @@ package game.engine.Screen
 		{
 			return (image.width / 2);
 		}
+		
 		public function getMinY(image:Bitmap):int
 		{
 			return (image.height / 2);
 		}
+		
 		public function getMaxX(image:Bitmap):int
 		{
 			return (image.stage.stageWidth - (image.width / 2));
 		}
+		
 		public function getMaxY(image:Bitmap):int
 		{
 			return (image.stage.stageHeight - 40 - (image.width / 2));

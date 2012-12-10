@@ -2,11 +2,11 @@ package game.engine.Object
 {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	
 	/**
 	 * Enemy ship class provides all the functionality for enemy ships,
-	 * it can add and remove itself from the screen as well as take damage
 	 *
-	 * "Blue as justice my ships ride forth as emissaries of my great empire"
+	 * "Red as justice my ships ride forth as emissaries of my great empire"
 	 * -Krasmak the Cruel
 	 *
 	 * @author William Drescher
@@ -28,19 +28,23 @@ package game.engine.Object
 			var enemyShipImage:Bitmap = enemyShip.getImage();
 			if ((enemyShipImage.x - enemyShipImage.width / 2) < heroShip.getAbsoluteX())
 			{
-				enemyShip.getImage().x++;
+				enemyShip.getImage().x += this.getSpeed();
+				trace(this.getSpeed());
 			}
 			if ((enemyShipImage.x + enemyShipImage.width / 2) > heroShip.getAbsoluteX())
 			{
-				enemyShip.getImage().x--;
+				enemyShip.getImage().x -= this.getSpeed();
+				trace(this.getSpeed());
 			}
 			if ((enemyShipImage.y + enemyShipImage.height / 2) < heroShip.getAbsoluteY())
 			{
-				enemyShip.getImage().y++;
+				enemyShip.getImage().y += this.getSpeed();
+				trace(this.getSpeed());
 			}
 			if ((enemyShipImage.y - enemyShipImage.height / 2) > heroShip.getAbsoluteY())
 			{
-				enemyShip.getImage().y--;
+				enemyShip.getImage().y -= this.getSpeed();
+				trace(this.getSpeed());
 			}
 		}
 		

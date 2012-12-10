@@ -19,7 +19,7 @@ package game.engine.Input
 	
 	/**
 	 * This class controls movement for the player using the keyboard as an input
-	 * The Controls are the arrow keys for movement and space to fire
+	 * The Controls are the arrow keys for movement, p to pause and space to fire.
 	 * By setting flags for arrows it allows multiple keys to be used simultaneously
 	 * to direct the ship.
 	 *
@@ -33,27 +33,24 @@ package game.engine.Input
 	 */
 	public class KeyboardControl
 	{
+		//Bullet Image
+		[Embed(source="../../images/bullet.png")]
+		private var bulletEmbedImage:Class;
+		private var bulletImage:Bitmap = new bulletEmbedImage();
+		
 		//Movement Flags
 		private var leftArrow:Boolean = false;
 		private var rightArrow:Boolean = false;
 		private var upArrow:Boolean = false;
 		private var downArrow:Boolean = false;
 		private var space:Boolean = false;
-		
-		//Other tools
-		private var heroShip:HeroShip;
+
 		private var screenManager:ScreenManager;
 		private var heroMovement:HeroMovement;
 		private var shooterGameManager:ShooterGameManager;
 		private var gameArea:Sprite;
 		private var stage:Stage;
-		
-		//Bullet Image
-		[Embed(source="../../images/bullet.png")]
-		private var bulletEmbedImage:Class;
-		private var bulletImage:Bitmap = new bulletEmbedImage();
-		
-		//Timer
+		private var heroShip:HeroShip;
 		private var fireTimer:Timer; //causes delay between fires
 		private var pauseTimer:Timer;
 		private var canFire:Boolean = true; //can you fire a bullet
@@ -70,8 +67,8 @@ package game.engine.Input
 			this.shooterGameManager = shooterGameManager;
 		}
 		
-		//Adds the movement event listeners to the game area
-		public function addMovementHandlers(stage:Stage):void
+		//Adds the movement event listeners to the game area as well as initializes timers
+		public function initializeKeyboardControl(stage:Stage):void
 		{
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyHit);
 			stage.addEventListener(KeyboardEvent.KEY_UP, noKeyHit);
@@ -83,7 +80,7 @@ package game.engine.Input
 		}
 		
 		//Removes the movement event listeners from the game area
-		public function removeMovementHandlers(stage:Stage):void
+		public function stopKeyboardControl(stage:Stage):void
 		{
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyHit);
 			stage.removeEventListener(KeyboardEvent.KEY_UP, noKeyHit);
@@ -107,7 +104,7 @@ package game.engine.Input
 		private function keyHit(event:KeyboardEvent):void
 		{
 			//Selects different options according to the key pressed
-			//Primarily movement but also shooting
+			//Primarily movement but also shooting and pausing
 			switch (event.keyCode)
 			{
 				case 80:
@@ -244,6 +241,7 @@ package game.engine.Input
 			canFire = true;
 		}
 		
+		//Creates a small delay between pausing and unpausing, or unpausing and pausing preventing the player from accidently double toggling
 		private function pauseTimerHandler(e:TimerEvent):void
 		{
 			canPause = true;

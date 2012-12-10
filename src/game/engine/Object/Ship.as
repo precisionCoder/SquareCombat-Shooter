@@ -46,8 +46,6 @@ package game.engine.Object
 		
 		//Accessors and mutators
 		
-		
-		
 		//Health
 		public function getHealth():uint
 		{
@@ -113,7 +111,7 @@ package game.engine.Object
 		{
 			return absoluteY
 		}
-		
+	
 	}
 
 }

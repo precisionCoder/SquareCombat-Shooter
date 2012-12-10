@@ -43,39 +43,39 @@ package game.engine.Object
 			switch (direction)
 			{
 				case "up":
-					bulletImage.x = x - (bulletImage.width/2);
+					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y;
-				break;
+					break;
 				case "upLeft":
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y - (bulletImage.height / 2);
-				break;
+					break;
 				case "upRight":
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y - (bulletImage.height / 2);
-				break;
+					break;
 				case "down":
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y;
-				break;
+					break;
 				case "downLeft":
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y - (bulletImage.height / 2);
-				break;
+					break;
 				case "downRight":
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y - (bulletImage.height / 2);
-				break;
+					break;
 				case "left":
 					bulletImage.x = x;
-					bulletImage.y = y  - (bulletImage.height/2);
-				break;
+					bulletImage.y = y - (bulletImage.height / 2);
+					break;
 				case "right":
 					bulletImage.x = x;
-					bulletImage.y = y  - (bulletImage.height/2);
-				break;
+					bulletImage.y = y - (bulletImage.height / 2);
+					break;
 			}
-
+			
 			//Add Image
 			getParent().addChild(bulletImage);
 		}
@@ -88,37 +88,36 @@ package game.engine.Object
 			{
 				case "up":
 					bulletImage.y -= speed * 2;
-				break;
+					break;
 				case "upLeft":
 					bulletImage.x -= speed * 2;
 					bulletImage.y -= speed * 2;
-				break;
+					break;
 				case "upRight":
 					bulletImage.x += speed * 2;
 					bulletImage.y -= speed * 2;
-				break;
+					break;
 				case "down":
 					bulletImage.y += speed * 2;
-				break;
+					break;
 				case "downLeft":
 					bulletImage.x -= speed * 2;
 					bulletImage.y += speed * 2;
-				break;
+					break;
 				case "downRight":
 					bulletImage.x += speed * 2;
 					bulletImage.y += speed * 2;
-				break;
+					break;
 				case "left":
 					bulletImage.x -= speed * 2;
-				break;
+					break;
 				case "right":
 					bulletImage.x += speed * 2;
-				break;
+					break;
 			}
 			
 			var collisionDetector:CollisionDetector = new CollisionDetector();
-			if (collisionDetector.checkForBulletCollisions(heroShip, this, screenManager) ||
-				collisionDetector.checkIfObjectIsOutOfBounds(this.getImage().x, this.getImage().y, this.getImage(), this.getParent()))
+			if (collisionDetector.checkForBulletCollisions(heroShip, this, screenManager) || collisionDetector.checkIfObjectIsOutOfBounds(this.getImage().x, this.getImage().y, this.getImage(), this.getParent()))
 			{
 				screenManager.removeBulletFromScreen(this);
 				removeFromScreen();
@@ -142,5 +141,5 @@ package game.engine.Object
 			this.bulletId = bulletId;
 		}
 	}
-	
+
 }

@@ -6,7 +6,6 @@ package game.engine.Movement
 	import game.engine.Screen.ScreenManager;
 	
 	/**
-	 *
 	 * Handles all the movement for the hero's ship based on the ships speed
 	 * Checks for collisions and reverses the movement if a collision occurs, then
 	 * calls the normalizer to make sure the position is correct for the direction
@@ -24,6 +23,7 @@ package game.engine.Movement
 		private var ship:HeroShip;
 		private var screenManager:ScreenManager;
 		private var collisionDetector:CollisionDetector;
+		
 		public function HeroMovement(ship:HeroShip, screenManager:ScreenManager)
 		{
 			this.ship = ship;
@@ -180,7 +180,7 @@ package game.engine.Movement
 			}
 			fixCoords();
 		}
-		
+	
 	}
 
 }

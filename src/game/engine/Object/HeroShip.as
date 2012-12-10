@@ -23,7 +23,7 @@ package game.engine.Object
 		{
 			super(image, health, speed, gameArea);
 		}
-					
+		
 		public function addScore(extraScore:int):void
 		{
 			score += extraScore;

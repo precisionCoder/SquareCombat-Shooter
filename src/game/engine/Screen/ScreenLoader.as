@@ -15,6 +15,9 @@ package game.engine.Screen
 	 * A class that handles loading the various screens and bars that make up the ui
 	 *
 	 * @author William Drescher
+	 *
+	 * Copyright (c) 2012 William Drescher
+	 * Licensed under the MIT License, a copy of this license should be included with this software
 	 */
 	public class ScreenLoader
 	{
@@ -31,7 +34,6 @@ package game.engine.Screen
 		private var restartButton:Sprite;
 		
 		private var gameManager:ShooterGameManager;
-		
 		
 		public function ScreenLoader(stage:Stage)
 		{
@@ -170,11 +172,14 @@ package game.engine.Screen
 			
 			//Add end game message
 			var endGameMessage:TextField = new TextField();
-			endGameMessage.text = "Great Job! Your final Score was: " + heroShip.getScore();
+			endGameMessage.text = "Great Job! \nYour final Score was: " + heroShip.getScore();
 			var myFormat:TextFormat = new TextFormat();
 			myFormat.color = 0xAA0000;
 			myFormat.size = 45;
 			endGameMessage.setTextFormat(myFormat);
+			endGameMessage.multiline = true;
+			endGameMessage.wordWrap = true;
+			endGameMessage.width = 450;
 			myFormat.italic = true;
 			endGameMessage.autoSize = TextFieldAutoSize.CENTER;
 			endGameMessage.x = (restartScreen.width / 2) - (endGameMessage.textWidth / 2);
@@ -209,8 +214,7 @@ package game.engine.Screen
 		{
 			restartButtonImage.alpha = .75;
 		}
-		
-		
+	
 	}
 
 }

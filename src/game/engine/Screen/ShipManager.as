@@ -3,17 +3,21 @@ package game.engine.Screen
 	import game.engine.Object.Bullet;
 	import game.engine.Object.EnemyShip;
 	import game.engine.Object.HeroShip;
+	
 	/**
 	 * Performs operations on ships
 	 *
 	 * @author William Drescher
+	 *
+	 * Copyright (c) 2012 William Drescher
+	 * Licensed under the MIT License, a copy of this license should be included with this software
 	 */
 	public class ShipManager
 	{
 		
 		public function ShipManager()
 		{
-		
+			//Empty
 		}
 		
 		//Handles collisions of the player's ship and enemy ships

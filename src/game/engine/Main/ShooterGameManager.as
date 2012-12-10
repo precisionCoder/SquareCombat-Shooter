@@ -25,9 +25,8 @@ package game.engine.Main
 	import game.engine.Screen.ScreenLoader;
 	
 	/**
-	 * This game will implement most of the logic to manage the shooting game
-	 * This will allow the game flow to be more easily managed as well as stopped and
-	 * removed, allowing the game to be extended in other ways (starting menu, shop, etc)
+	 * This is the main part of the shooter game, it launches the various screens, initializes needed classes,
+	 * and controls game flow
 	 *
 	 * @author William Drescher
 	 *
@@ -74,7 +73,7 @@ package game.engine.Main
 			gameCollisionDetector = new CollisionDetector();
 			screenManager = new ScreenManager();
 			gameInitialized = false;
-			difficulty = 1.0;
+			difficulty = 1.00;
 		}
 		
 		private function initGame(spawnTime:int):void
@@ -85,7 +84,7 @@ package game.engine.Main
 			//Adds player keyboard movement controls
 			heroKeyboardControl = new KeyboardControl(heroShip, screenManager, gameArea, stage, this);
 			
-			//Add detector for player being dead
+			//Add game flow timer this will control enemy ships and bullet movement.
 			gameTimer = new Timer(25);
 			gameTimer.addEventListener(TimerEvent.TIMER, gameTick, false, 0, true);
 			
@@ -96,9 +95,9 @@ package game.engine.Main
 			gameInitialized = true;
 		}
 		
+		//Loads all the screen basics such as the gameArea, and score and healthbars
 		private function loadScreen():void
 		{
-			//Load screens
 			var screenLoader:ScreenLoader = new ScreenLoader(stage);
 			screenArea = screenLoader.loadScreen();
 			stage.addChild(screenArea);
@@ -114,6 +113,7 @@ package game.engine.Main
 			screenArea.addChild(coverScreen);
 		}
 		
+		//Creates the heroship and adds it to the screen manager
 		private function initPlayer():void
 		{
 			//Create player
@@ -138,7 +138,7 @@ package game.engine.Main
 			{
 				resetGame();
 				screenArea.removeChild(coverScreen);
-				heroKeyboardControl.addMovementHandlers(this.stage);
+				heroKeyboardControl.initializeKeyboardControl(this.stage);
 				gameTimer.start();
 				spawnTimer.start();
 			}
@@ -146,7 +146,7 @@ package game.engine.Main
 		
 		public function stopGame():void
 		{
-			heroKeyboardControl.removeMovementHandlers(this.stage);
+			heroKeyboardControl.stopKeyboardControl(this.stage);
 			gameTimer.stop();
 			spawnTimer.stop();
 		}
@@ -156,7 +156,7 @@ package game.engine.Main
 			gameTimer.stop();
 			spawnTimer.stop();
 			
-			//Add end game message
+			//Add pause message
 			pauseMessage = new TextField();
 			pauseMessage.text = "Paused";
 			var myFormat:TextFormat = new TextFormat();
@@ -168,7 +168,6 @@ package game.engine.Main
 			gameArea.addChild(pauseMessage);
 			pauseMessage.x = (gameArea.width / 2) - (pauseMessage.textWidth / 2);
 			pauseMessage.y = (gameArea.height / 3) - (pauseMessage.textHeight / 2);
-		
 		}
 		
 		public function unpauseGame():void
@@ -183,10 +182,10 @@ package game.engine.Main
 			screenManager.removeAllBullets();
 			screenManager.removeAllEnemyShips();
 			resetPlayer(heroShip, gameArea);
+			difficulty = 1.00;
 		}
 		
-		//Check if the game has ended by the hero dying or achieving the neccessary points
-		
+		//Perform all the neccessary game actions that should happen each round
 		private function gameTick(e:TimerEvent):void
 		{
 			var gameRunning:Boolean = true;
@@ -236,20 +235,22 @@ package game.engine.Main
 			}
 		}
 		
-		//Spawn a new enemy ship in a random location
+		//Spawn a new enemy ship in a random location on a random wall
+		//if Math.round(difficulty) is given for the EnemyShip speed then speed of ships will increase over time
+		//the same can be done with health but is not currently implemented since it makes it more fun not to have it
 		private function spawnTick(e:TimerEvent):void
 		{
 			var enemyImageData:BitmapData = enemyImage.bitmapData;
 			var myClone:BitmapData = enemyImageData.clone();
 			var myEnemyClone:Bitmap = new Bitmap(myClone);
-			var enemyShip:EnemyShip = new EnemyShip(myEnemyClone, 5, Math.round(difficulty), gameArea);
+			var enemyShip:EnemyShip = new EnemyShip(myEnemyClone, 5, 1, gameArea);
 			var spawnLocation:Point = chooseSpawnPoint();
 			enemyShip.addToScreen(spawnLocation.x, spawnLocation.y);
 			screenManager.addEnemyShipToScreen(enemyShip);
-			difficulty += 0.1;
+			difficulty += 0.01;
 		}
 		
-		//Choose spawning wall
+		//Randomly decide a spawnpoint on a wall for a new enemy to spawn
 		private function chooseSpawnPoint():Point
 		{
 			var x:int = Math.floor(Math.random() * (gameArea.width + 1));
@@ -281,7 +282,6 @@ package game.engine.Main
 			return spawnPoint;
 		}
 		
-		//Check if hero is dead
 		private function heroIsDead():Boolean
 		{
 			if (heroShip.getDead())
@@ -308,7 +308,6 @@ package game.engine.Main
 			heroShip.setAbsoluteY(heroY);
 			heroShip.setDirection("up");
 			heroShip.addToScreen(heroX, heroY);
-			//screenManager.setHeroShip(heroShip);
 			DirectionNormalizer.normalize(heroShip);
 		}
 	}

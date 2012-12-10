@@ -5,9 +5,13 @@ package game.engine.Screen
 	import game.engine.Object.HeroShip;
 	
 	/**
-	 * Contains a list of all of the objects that are currently on the screen
+	 * Contains a list of all of the objects that are currently on the screen as well as functions
+	 * to manipulate them.  This class also can move enemy ships and bullets.
 	 *
 	 * @author William Drescher
+	 *
+	 * Copyright (c) 2012 William Drescher
+	 * Licensed under the MIT License, a copy of this license should be included with this software
 	 */
 	public class ScreenManager
 	{
