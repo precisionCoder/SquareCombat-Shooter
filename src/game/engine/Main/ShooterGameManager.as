@@ -14,6 +14,7 @@ package game.engine.Main
 	import flash.utils.Timer;
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
+	import flash.media.Sound;
 	
 	//My Classes
 	import game.engine.Screen.CollisionDetector;
@@ -44,6 +45,16 @@ package game.engine.Main
 		[Embed(source="../../images/Custom_Spaceship.png")]
 		private var heroEmbedImage:Class;
 		private var heroImage:Bitmap = new heroEmbedImage();
+		
+		//Add hero image
+		[Embed(source="../../sounds/GameStartSound.mp3")]
+		private var gameStartEmbedSound:Class;
+		private var gameStartSound:Sound = new gameStartEmbedSound();
+		
+		//Add hero image
+		[Embed(source="../../sounds/GameOverSound.mp3")]
+		private var gameOverEmbedSound:Class;
+		private var gameOverSound:Sound = new gameOverEmbedSound();
 		
 		//Add game engine components
 		private var gameCollisionDetector:CollisionDetector;
@@ -136,6 +147,7 @@ package game.engine.Main
 			}
 			else
 			{
+				gameStartSound.play();
 				resetGame();
 				screenArea.removeChild(coverScreen);
 				heroKeyboardControl.initializeKeyboardControl(this.stage);
@@ -191,7 +203,10 @@ package game.engine.Main
 			var gameRunning:Boolean = true;
 			//Check that game is still running
 			if (heroIsDead())
+			{
+				gameOverSound.play();
 				gameRunning = false;
+			}
 			
 			//Adds the top bar items
 			healthBar.text = "Lives:";

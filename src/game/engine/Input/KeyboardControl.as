@@ -16,6 +16,7 @@ package game.engine.Input
 	import game.engine.Object.Bullet;
 	import game.engine.Object.HeroShip;
 	import game.engine.Screen.ScreenManager;
+	import flash.media.Sound;
 	
 	/**
 	 * This class controls movement for the player using the keyboard as an input
@@ -34,9 +35,14 @@ package game.engine.Input
 	public class KeyboardControl
 	{
 		//Bullet Image
-		[Embed(source="../../images/bullet.png")]
+		[Embed(source="../../images/Bullet.png")]
 		private var bulletEmbedImage:Class;
 		private var bulletImage:Bitmap = new bulletEmbedImage();
+		
+		//Bullet Sound
+		[Embed(source = '../../sounds/ShootSound.mp3')]
+		private var shootEmbedSound:Class;
+		private var shootSound:Sound = new shootEmbedSound();
 		
 		//Movement Flags
 		private var leftArrow:Boolean = false;
@@ -44,7 +50,7 @@ package game.engine.Input
 		private var upArrow:Boolean = false;
 		private var downArrow:Boolean = false;
 		private var space:Boolean = false;
-
+		
 		private var screenManager:ScreenManager;
 		private var heroMovement:HeroMovement;
 		private var shooterGameManager:ShooterGameManager;
@@ -219,6 +225,9 @@ package game.engine.Input
 			}
 			if (space && canFire)
 			{
+				//Play firing sound
+				shootSound.play();
+				
 				//Clone the image and use it to make a new bullet
 				var bulletImageData:BitmapData = bulletImage.bitmapData;
 				var myClone:BitmapData = bulletImageData.clone();

@@ -3,6 +3,7 @@ package game.engine.Screen
 	import game.engine.Object.Bullet;
 	import game.engine.Object.EnemyShip;
 	import game.engine.Object.HeroShip;
+	import flash.media.Sound;
 	
 	/**
 	 * Performs operations on ships
@@ -14,6 +15,10 @@ package game.engine.Screen
 	 */
 	public class ShipManager
 	{
+		//Add hero image
+		[Embed(source="../../sounds/EnemyDeath.mp3")]
+		private var enemyDeathEmbedSound:Class;
+		private var enemyDeathSound:Sound = new enemyDeathEmbedSound();
 		
 		public function ShipManager()
 		{
@@ -41,6 +46,7 @@ package game.engine.Screen
 			enemyShip.takeDamage(bullet.getDamage());
 			if (enemyShip.getDead())
 			{
+				enemyDeathSound.play();
 				heroShip.addScore(1);
 				screenManager.removeEnemyShipFromScreen(enemyShip.getEnemyShipId());
 			}

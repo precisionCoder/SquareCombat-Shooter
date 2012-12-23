@@ -6,6 +6,7 @@ package game.engine.Object
 	import flash.events.Event;
 	import game.engine.Screen.CollisionDetector;
 	import game.engine.Screen.ScreenManager;
+	import flash.media.Sound;
 	
 	/**
 	 * The bullet class handles everything to do with the bullet object.
@@ -26,7 +27,7 @@ package game.engine.Object
 		private var damage:int;
 		private var bulletId:uint;
 		private var screenManager:ScreenManager;
-		
+				
 		public function Bullet(speed:uint, damage:uint, bulletImage:Bitmap, parent:Sprite, direction:String)
 		{
 			this.screenManager = screenManager;
