@@ -21,17 +21,64 @@ package game.engine.Screen
 	 */
 	public class ScreenLoader
 	{
-		[Embed(source="../../images/Start_Button.jpg")]
+		//Start Screen images
+		[Embed(source="../../images/StartScreenBackground.png")]
+		private var startScreenBackgroundEmbedImage:Class;
+		private var startScreenBackgroundImage:Bitmap = new startScreenBackgroundEmbedImage();
+		
+		[Embed(source="../../images/Title.png")]
+		private var titleEmbedImage:Class;
+		private var titleImage:Bitmap = new titleEmbedImage();
+		
+		[Embed(source="../../images/Instructions.png")]
+		private var instructionsEmbedImage:Class;
+		private var instructionsImage:Bitmap = new instructionsEmbedImage();
+		
+		[Embed(source="../../images/StartButton.png")]
 		private var startButtonEmbedImage:Class;
 		private var startButtonImage:Bitmap = new startButtonEmbedImage();
 		
-		[Embed(source="../../images/Restart_Button.jpg")]
-		private var restartButtonEmbedImage:Class;
-		private var restartButtonImage:Bitmap = new restartButtonEmbedImage();
+		//Game area screen images
+		[Embed(source="../../images/TopBar.png")]
+		private var topBarEmbedImage:Class;
+		private var topBarImage:Bitmap = new topBarEmbedImage();
+		
+		[Embed(source="../../images/HealthBar.png")]
+		private var healthBarEmbedImage:Class;
+		private var healthBarImage:Bitmap = new healthBarEmbedImage();
+		
+		[Embed(source="../../images/ScoreBar.png")]
+		private var scoreBarEmbedImage:Class;
+		private var scoreBarImage:Bitmap = new scoreBarEmbedImage();
+		
+		[Embed(source="../../images/GameArea.png")]
+		private var gameAreaEmbedImage:Class;
+		private var gameAreaImage:Bitmap = new gameAreaEmbedImage();
+		
+		[Embed(source="../../images/GameFrame.png")]
+		private var gameFrameEmbedImage:Class;
+		private var gameFrameImage:Bitmap = new gameFrameEmbedImage();
+		
+		//Game over screen images
+		[Embed(source="../../images/GameOverBackground.png")]
+		private var gameOverBackgroundEmbedImage:Class;
+		private var gameOverBackgroundImage:Bitmap = new gameOverBackgroundEmbedImage();
+		
+		[Embed(source="../../images/GameOverTitle.png")]
+		private var gameOverTitleEmbedImage:Class;
+		private var gameOverTitleImage:Bitmap = new gameOverTitleEmbedImage();
+		
+		[Embed(source="../../images/FinalScorePanel.png")]
+		private var finalScoreEmbedImage:Class;
+		private var finalScoreImage:Bitmap = new finalScoreEmbedImage();
+		
+		[Embed(source="../../images/ContinueButton.png")]
+		private var continueButtonEmbedImage:Class;
+		private var continueButtonImage:Bitmap = new continueButtonEmbedImage();
 		
 		private var stage:Stage;
 		private var startButton:Sprite;
-		private var restartButton:Sprite;
+		private var continueButton:Sprite;
 		
 		private var gameManager:ShooterGameManager;
 		
@@ -43,12 +90,29 @@ package game.engine.Screen
 		public function loadGameScreen():Sprite
 		{
 			var gameArea:Sprite = new Sprite();
-			gameArea.graphics.beginFill(0xF0F0F0);
-			gameArea.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight - 40);
-			gameArea.graphics.endFill();
-			gameArea.x = 0;
-			gameArea.y = (stage.stageHeight - gameArea.height);
+			var gameAreaFrameSize:int = 26;
+			gameArea.addChild(gameAreaImage);
+			gameArea.x = gameAreaFrameSize;
+			gameArea.y = (stage.stageHeight - gameArea.height - gameAreaFrameSize);
 			return gameArea;
+		}
+		
+		public function loadGameFrame():Sprite
+		{
+			var gameFrame:Sprite = new Sprite();
+			gameFrame.x = 0;
+			gameFrame.y = (stage.stageHeight - gameFrameImage.height);
+			gameFrame.addChild(gameFrameImage);
+			return gameFrame;
+		}
+		
+		public function loadTopBar():Sprite
+		{
+			var topBar:Sprite = new Sprite();
+			topBar.addChild(topBarImage);
+			topBar.x = 0;
+			topBar.y = 0;
+			return topBar;
 		}
 		
 		public function loadScreen():Sprite
@@ -62,34 +126,36 @@ package game.engine.Screen
 			return screenArea;
 		}
 		
-		public function loadHealthBar():TextField
+		public function loadHealthBar():Sprite
 		{
-			var format:TextFormat = new TextFormat();
-			format.size = 30;
-			var healthBar:TextField = new TextField();
-			healthBar.text = "Life: 0";
-			healthBar.height = 40;
-			healthBar.width = 150;
-			healthBar.x = 0;
-			healthBar.y = 0;
-			healthBar.setTextFormat(format);
-			healthBar.defaultTextFormat = format;
+			var healthBar:Sprite = new Sprite();
+			healthBar.addChild(healthBarImage);
+			healthBar.x = (topBarImage.height - healthBar.height) / 2;
+			healthBar.y = (topBarImage.height - healthBar.height) / 2;
 			return healthBar;
 		}
 		
-		public function loadScoreBar():TextField
+		public function loadScoreBar():Sprite
 		{
-			var format:TextFormat = new TextFormat();
-			format.size = 30;
-			var scoreBar:TextField = new TextField();
-			scoreBar.text = "Score: 0";
-			scoreBar.height = 40;
-			scoreBar.width = 150;
-			scoreBar.x = stage.stageWidth - 150;
-			scoreBar.y = 0;
-			scoreBar.setTextFormat(format);
-			scoreBar.defaultTextFormat = format;
+			var scoreBar:Sprite = new Sprite();
+			scoreBar.addChild(scoreBarImage);
+			scoreBar.x = (topBarImage.width - scoreBar.width) - ((topBarImage.height - scoreBar.height) / 2);
+			scoreBar.y = (topBarImage.height - scoreBar.height) / 2;
 			return scoreBar;
+		}
+		
+		public function loadScoreBarText():TextField
+		{
+			//Add end game message
+			var score:TextField = new TextField();
+			score.text = "0";
+			var myFormat:TextFormat = new TextFormat();
+			myFormat.size = 24;
+			score.defaultTextFormat = myFormat;
+			score.setTextFormat(myFormat);
+			score.x = topBarImage.width - (scoreBarImage.width / 2);
+			score.y = (topBarImage.height / 2) - 15;
+			return score;
 		}
 		
 		public function loadStartScreen(gameManager:ShooterGameManager):Sprite
@@ -97,38 +163,17 @@ package game.engine.Screen
 			this.gameManager = gameManager;
 			//Create Screen
 			var startScreen:Sprite = new Sprite();
-			startScreen.graphics.beginFill(0xF0F0F0);
-			startScreen.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
-			startScreen.graphics.endFill();
-			startScreen.x = 0;
-			startScreen.y = 0;
+			startScreen.addChild(startScreenBackgroundImage);
+			var whitespace:int = 10;
 			
-			//Add welcome message
-			var welcomeMessage:TextField = new TextField();
-			welcomeMessage.text = "Welcome to Square Shooter!";
-			var welcomeFormat:TextFormat = new TextFormat();
-			welcomeFormat.color = 0xAA0000;
-			welcomeFormat.size = 45;
-			welcomeMessage.setTextFormat(welcomeFormat);
-			welcomeFormat.italic = true;
-			welcomeMessage.autoSize = TextFieldAutoSize.CENTER;
-			welcomeMessage.x = (startScreen.width / 2) - (welcomeMessage.textWidth / 2);
-			welcomeMessage.y = (startScreen.height / 3) - (welcomeMessage.textHeight / 2);
-			startScreen.addChild(welcomeMessage);
+			titleImage.x = (startScreen.width / 2) - (titleImage.width / 2);
+			titleImage.y = whitespace;
+			startScreen.addChild(titleImage);
 			
 			//Add instructions
-			var instructionMessage:TextField = new TextField();
-			instructionMessage.width = welcomeMessage.width;
-			instructionMessage.multiline = true;
-			instructionMessage.wordWrap = true;
-			instructionMessage.text = "Use the arrow keys to move your ship, the space bar fires your weapon, and press the 'p' key to pause";
-			var instructionFormat:TextFormat = new TextFormat();
-			instructionFormat.size = 25;
-			instructionMessage.setTextFormat(instructionFormat);
-			instructionMessage.autoSize = TextFieldAutoSize.CENTER;
-			instructionMessage.x = (startScreen.width / 2) - (welcomeMessage.textWidth / 2);
-			instructionMessage.y = (startScreen.height / 2) - (welcomeMessage.textHeight / 2);
-			startScreen.addChild(instructionMessage);
+			instructionsImage.x = (startScreen.width / 2) - (instructionsImage.width / 2);
+			instructionsImage.y = titleImage.height + (whitespace * 2);
+			startScreen.addChild(instructionsImage);
 			
 			//Add start button
 			startButton = new Sprite();
@@ -136,8 +181,8 @@ package game.engine.Screen
 			startButton.addEventListener(MouseEvent.MOUSE_OVER, startButtonRolledOver);
 			startButton.addEventListener(MouseEvent.MOUSE_OUT, startButtonRolledOut);
 			startButton.x = (startScreen.width / 2) - (startButtonImage.width / 2);
-			startButton.y = startScreen.height - 100;
-			startButtonImage.alpha = .75;
+			startButton.y = instructionsImage.height + (whitespace * 2) + ((instructionsImage.height + (whitespace * 2)) / 3);
+			startButtonImage.alpha = 100;
 			startButton.addChild(startButtonImage);
 			startScreen.addChild(startButton);
 			
@@ -156,48 +201,51 @@ package game.engine.Screen
 		
 		private function startButtonRolledOut(event:MouseEvent):void
 		{
-			startButtonImage.alpha = .75;
+			startButtonImage.alpha = 1;
 		}
 		
-		public function loadRestartScreen(gameManager:ShooterGameManager, heroShip:HeroShip):Sprite
+		public function loadGameOverScreen(gameManager:ShooterGameManager, heroShip:HeroShip):Sprite
 		{
+			var spacing:int = (gameOverBackgroundImage.height - gameOverTitleImage.height - finalScoreImage.height) / 3;
 			this.gameManager = gameManager;
-			//Create Screen
-			var restartScreen:Sprite = new Sprite();
-			restartScreen.graphics.beginFill(0xF0F0F0);
-			restartScreen.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
-			restartScreen.graphics.endFill();
-			restartScreen.x = 0;
-			restartScreen.y = 0;
+			
+			var gameOverScreen:Sprite = new Sprite();
+			gameOverBackgroundImage.x = 0;
+			gameOverBackgroundImage.y = 0;
+			gameOverScreen.addChild(gameOverBackgroundImage);
+			
+			gameOverTitleImage.x = (gameOverBackgroundImage.width / 2) - (gameOverTitleImage.width / 2);
+			gameOverTitleImage.y = spacing;
+			gameOverScreen.addChild(gameOverTitleImage);
+			
+			finalScoreImage.x = (gameOverBackgroundImage.width / 2) - (finalScoreImage.width / 2);
+			finalScoreImage.y = gameOverTitleImage.height + (spacing * 2);
+			gameOverScreen.addChild(finalScoreImage);
 			
 			//Add end game message
-			var endGameMessage:TextField = new TextField();
-			endGameMessage.text = "Great Job! \nYour final Score was: " + heroShip.getScore();
+			var finalScore:TextField = new TextField();
+			finalScore.text = heroShip.getScore().toString();
 			var myFormat:TextFormat = new TextFormat();
-			myFormat.color = 0xAA0000;
+			//myFormat.color = 0xAA0000;
 			myFormat.size = 45;
-			endGameMessage.setTextFormat(myFormat);
-			endGameMessage.multiline = true;
-			endGameMessage.wordWrap = true;
-			endGameMessage.width = 450;
-			myFormat.italic = true;
-			endGameMessage.autoSize = TextFieldAutoSize.CENTER;
-			endGameMessage.x = (restartScreen.width / 2) - (endGameMessage.textWidth / 2);
-			endGameMessage.y = (restartScreen.height / 3) - (endGameMessage.textHeight / 2);
-			restartScreen.addChild(endGameMessage);
+			//myFormat.font =
+			finalScore.setTextFormat(myFormat);
+			finalScore.x = (gameOverScreen.width / 2) - (finalScore.textWidth / 2);
+			finalScore.y = finalScoreImage.y + (finalScoreImage.height / 2) - (finalScore.height / 2);
+			gameOverScreen.addChild(finalScore);
 			
 			//Add start button
-			restartButton = new Sprite();
-			restartButton.addEventListener(MouseEvent.CLICK, restartButtonClicked);
-			restartButton.addEventListener(MouseEvent.MOUSE_OVER, restartButtonRolledOver);
-			restartButton.addEventListener(MouseEvent.MOUSE_OUT, restartButtonRolledOut);
-			restartButton.x = (restartScreen.width / 2) - (startButtonImage.width / 2);
-			restartButton.y = restartScreen.height - 100;
-			restartButtonImage.alpha = .75;
-			restartButton.addChild(restartButtonImage);
-			restartScreen.addChild(restartButton);
+			continueButton = new Sprite();
+			continueButton.addEventListener(MouseEvent.CLICK, restartButtonClicked);
+			continueButton.addEventListener(MouseEvent.MOUSE_OVER, restartButtonRolledOver);
+			continueButton.addEventListener(MouseEvent.MOUSE_OUT, restartButtonRolledOut);
+			continueButton.x = (gameOverScreen.width / 2) - (continueButtonImage.width / 2);
+			continueButton.y = gameOverScreen.height - 100;
+			continueButtonImage.alpha = 1;
+			continueButton.addChild(continueButtonImage);
+			gameOverScreen.addChild(continueButton);
 			
-			return restartScreen;
+			return gameOverScreen;
 		}
 		
 		private function restartButtonClicked(event:MouseEvent):void
@@ -207,12 +255,12 @@ package game.engine.Screen
 		
 		private function restartButtonRolledOver(event:MouseEvent):void
 		{
-			restartButtonImage.alpha = 1;
+			continueButtonImage.alpha = 1;
 		}
 		
 		private function restartButtonRolledOut(event:MouseEvent):void
 		{
-			restartButtonImage.alpha = .75;
+			continueButtonImage.alpha = 1;
 		}
 	
 	}

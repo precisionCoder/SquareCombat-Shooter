@@ -37,12 +37,12 @@ package game.engine.Main
 	public class ShooterGameManager
 	{
 		//Add enemy image
-		[Embed(source="../../images/Enemy.jpg")]
+		[Embed(source="../../images/BasicEnemy.png")]
 		private var enemyEmbedImage:Class;
 		private var enemyImage:Bitmap = new enemyEmbedImage();
 		
 		//Add hero image
-		[Embed(source="../../images/Custom_Spaceship.png")]
+		[Embed(source="../../images/BasicHero.png")]
 		private var heroEmbedImage:Class;
 		private var heroImage:Bitmap = new heroEmbedImage();
 		
@@ -70,12 +70,14 @@ package game.engine.Main
 		private var screenArea:Sprite;
 		private var gameArea:Sprite;
 		private var coverScreen:Sprite;
-		private var scoreBar:TextField;
-		private var healthBar:TextField;
+		private var scoreBar:Sprite;
+		private var scoreBarText:TextField;
+		private var healthBar:Sprite;
 		private var gameInitialized:Boolean;
 		private var pauseMessage:TextField;
 		private var difficulty:Number;
 		private var lifeArray:Array;
+		private var topBar:Sprite;
 		
 		public function ShooterGameManager(stage:Stage)
 		{
@@ -112,14 +114,18 @@ package game.engine.Main
 			var screenLoader:ScreenLoader = new ScreenLoader(stage);
 			screenArea = screenLoader.loadScreen();
 			stage.addChild(screenArea);
-			gameArea = screenLoader.loadGameScreen()
+			gameArea = screenLoader.loadGameScreen();
 			screenArea.addChild(gameArea);
-			healthBar = screenLoader.loadHealthBar()
+			var gameFrame:Sprite = screenLoader.loadGameFrame();
+			//screenArea.addChild(gameFrame);
+			topBar = screenLoader.loadTopBar();
+			screenArea.addChild(topBar)
+			healthBar = screenLoader.loadHealthBar();
 			screenArea.addChild(healthBar);
-			healthBar.text = "Life: ";
-			scoreBar = screenLoader.loadScoreBar()
+			scoreBar = screenLoader.loadScoreBar();
 			screenArea.addChild(scoreBar);
-			scoreBar.text = "Score: ";
+			scoreBarText = screenLoader.loadScoreBarText();
+			screenArea.addChild(scoreBarText);
 			coverScreen = screenLoader.loadStartScreen(this);
 			screenArea.addChild(coverScreen);
 		}
@@ -209,9 +215,8 @@ package game.engine.Main
 			}
 			
 			//Adds the top bar items
-			healthBar.text = "Lives:";
 			var lives:int = heroShip.getHealth();
-			var lifePosition:int = healthBar.width;
+			var lifePosition:int = (healthBar.width / 2) - 25;
 			
 			if (lifeArray.length != heroShip.getHealth())
 			{
@@ -233,6 +238,7 @@ package game.engine.Main
 					lifeImage.width = lifeImage.width / 1.5;
 					lifeImage.height = lifeImage.height / 1.5;
 					lifeImage.x = lifePosition;
+					lifeImage.y = (topBar.height / 2) - (lifeImage.height / 2);
 					lifeArray.push(lifeImage);
 					screenArea.addChild(lifeImage);
 					lifePosition += lifeImage.width;
@@ -240,7 +246,7 @@ package game.engine.Main
 				
 			}
 			
-			scoreBar.text = "Score: " + heroShip.getScore();
+			scoreBarText.text = heroShip.getScore().toString();
 			
 			if (gameRunning)
 			{
@@ -303,7 +309,7 @@ package game.engine.Main
 			{
 				stopGame();
 				var screenLoader:ScreenLoader = new ScreenLoader(stage);
-				coverScreen = screenLoader.loadRestartScreen(this, heroShip);
+				coverScreen = screenLoader.loadGameOverScreen(this, heroShip);
 				screenArea.addChild(coverScreen);
 				return true;
 			}

@@ -62,21 +62,21 @@ package game.engine.Screen
 			var outOfBounds:Boolean = false;
 			
 			//Checks if image is out of bounds on the x coordinate
-			if (x > (image.stage.stageWidth - (image.width / 2)))
+			if (x + (image.height/2) >= 650)
 			{
 				outOfBounds = true;
 			}
-			if (x < (image.width / 2))
+			if (x - (image.height/2) <= 0)
 			{
 				outOfBounds = true;
 			}
 			
 			//Checks if image is out of bounds on the y coordinate
-			if (y > (image.stage.stageHeight - 40 - (image.width / 2)))
+			if (y + (image.height / 2) >= 400)
 			{
 				outOfBounds = true;
 			}
-			if (y < (image.height / 2))
+			if (y - (image.height/2) <= 0)
 			{
 				outOfBounds = true
 			}

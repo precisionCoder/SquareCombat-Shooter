@@ -22,6 +22,7 @@ package game.engine.Object
 		public function HeroShip(image:Bitmap, health:int, speed:uint, gameArea:Sprite)
 		{
 			super(image, health, speed, gameArea);
+			score = 0;
 		}
 		
 		public function addScore(extraScore:int):void
