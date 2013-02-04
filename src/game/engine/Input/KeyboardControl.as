@@ -1,4 +1,4 @@
-package game.engine.Input
+package game.engine.input
 {
 	import flash.display.Stage;
 	import flash.display.Sprite;
@@ -11,12 +11,14 @@ package game.engine.Input
 	import flash.display.BitmapData;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import game.engine.Main.ShooterGameManager;
-	import game.engine.Movement.HeroMovement;
-	import game.engine.Object.Bullet;
-	import game.engine.Object.HeroShip;
-	import game.engine.Screen.ScreenManager;
+	import game.engine.main.ShooterGameManager;
+	import game.engine.movement.HeroMovement;
+	import game.engine.object.Bullet;
+	import game.engine.object.HeroShip;
+	import game.engine.screen.ScreenManager;
 	import flash.media.Sound;
+	import game.engine.assets.GameScreenImageManager;
+	import game.engine.assets.SoundManager;
 	
 	/**
 	 * This class controls movement for the player using the keyboard as an input
@@ -24,26 +26,14 @@ package game.engine.Input
 	 * By setting flags for arrows it allows multiple keys to be used simultaneously
 	 * to direct the ship.
 	 *
-	 * "Control me! Me! That is a feat no one has ever managed"
-	 * -Krasmak the Cruel
-	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class KeyboardControl
 	{
-		//Bullet Image
-		[Embed(source="../../images/Bullet.png")]
-		private var bulletEmbedImage:Class;
-		private var bulletImage:Bitmap = new bulletEmbedImage();
-		
-		//Bullet Sound
-		[Embed(source = '../../sounds/ShootSound.mp3')]
-		private var shootEmbedSound:Class;
-		private var shootSound:Sound = new shootEmbedSound();
-		
 		//Movement Flags
 		private var leftArrow:Boolean = false;
 		private var rightArrow:Boolean = false;
@@ -113,7 +103,7 @@ package game.engine.Input
 			//Primarily movement but also shooting and pausing
 			switch (event.keyCode)
 			{
-				case 80:
+				case 80: 
 					if (canPause)
 					{
 						if (paused)
@@ -131,31 +121,31 @@ package game.engine.Input
 						pauseTimer.start();
 					}
 					break;
-				case Keyboard.SPACE:
+				case Keyboard.SPACE: 
 					if (canFire && !paused)
 					{
 						space = true;
 					}
 					break;
-				case Keyboard.RIGHT:
+				case Keyboard.RIGHT: 
 					if (!paused)
 					{
 						rightArrow = true;
 					}
 					break;
-				case Keyboard.LEFT:
+				case Keyboard.LEFT: 
 					if (!paused)
 					{
 						leftArrow = true;
 					}
 					break;
-				case Keyboard.UP:
+				case Keyboard.UP: 
 					if (!paused)
 					{
 						upArrow = true;
 					}
 					break;
-				case Keyboard.DOWN:
+				case Keyboard.DOWN: 
 					if (!paused)
 					{
 						downArrow = true;
@@ -170,19 +160,19 @@ package game.engine.Input
 		{
 			switch (event.keyCode)
 			{
-				case Keyboard.RIGHT:
+				case Keyboard.RIGHT: 
 					rightArrow = false;
 					break;
-				case Keyboard.LEFT:
+				case Keyboard.LEFT: 
 					leftArrow = false;
 					break;
-				case Keyboard.UP:
+				case Keyboard.UP: 
 					upArrow = false;
 					break;
-				case Keyboard.DOWN:
+				case Keyboard.DOWN: 
 					downArrow = false;
 					break;
-				case Keyboard.SPACE:
+				case Keyboard.SPACE: 
 					space = false;
 					break;
 			}
@@ -226,14 +216,9 @@ package game.engine.Input
 			if (space && canFire)
 			{
 				//Play firing sound
-				shootSound.play();
-				
-				//Clone the image and use it to make a new bullet
-				var bulletImageData:BitmapData = bulletImage.bitmapData;
-				var myClone:BitmapData = bulletImageData.clone();
-				var myBulletClone:Bitmap = new Bitmap(myClone);
-				
-				var heroBullet:Bullet = new Bullet(5, 7, myBulletClone, gameArea, heroShip.getDirection());
+				SoundManager.playShoot();
+				var bulletImage:Bitmap = new Bitmap(GameScreenImageManager.getBulletImage());
+				var heroBullet:Bullet = new Bullet(5, 7, bulletImage, gameArea, heroShip.getDirection());
 				screenManager.addBulletToScreen(heroBullet);
 				canFire = false;
 				

@@ -1,4 +1,4 @@
-package game.engine.Object
+package game.engine.object
 {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -9,8 +9,9 @@ package game.engine.Object
 	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class GameObject
 	{

@@ -1,24 +1,22 @@
-package game.engine.Object
+package game.engine.object
 {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
-	import game.engine.Screen.CollisionDetector;
-	import game.engine.Screen.ScreenManager;
+	import game.engine.screen.CollisionDetector;
+	import game.engine.screen.ScreenManager;
 	import flash.media.Sound;
 	
 	/**
 	 * The bullet class handles everything to do with the bullet object.
 	 * That includes placement, movement, and the damage that the bullet does
 	 *
-	 * "Bullets are like friends, the most painful thing with both is when they stab you in the back"
-	 * -Markar the Mighty
-	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class Bullet extends GameObject
 	{
@@ -27,7 +25,7 @@ package game.engine.Object
 		private var damage:int;
 		private var bulletId:uint;
 		private var screenManager:ScreenManager;
-				
+		
 		public function Bullet(speed:uint, damage:uint, bulletImage:Bitmap, parent:Sprite, direction:String)
 		{
 			this.screenManager = screenManager;
@@ -43,35 +41,35 @@ package game.engine.Object
 			var bulletImage:Bitmap = getImage();
 			switch (direction)
 			{
-				case "up":
+				case "up": 
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y;
 					break;
-				case "upLeft":
+				case "upLeft": 
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y - (bulletImage.height / 2);
 					break;
-				case "upRight":
+				case "upRight": 
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y - (bulletImage.height / 2);
 					break;
-				case "down":
+				case "down": 
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y;
 					break;
-				case "downLeft":
+				case "downLeft": 
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y - (bulletImage.height / 2);
 					break;
-				case "downRight":
+				case "downRight": 
 					bulletImage.x = x - (bulletImage.width / 2);
 					bulletImage.y = y - (bulletImage.height / 2);
 					break;
-				case "left":
+				case "left": 
 					bulletImage.x = x;
 					bulletImage.y = y - (bulletImage.height / 2);
 					break;
-				case "right":
+				case "right": 
 					bulletImage.x = x;
 					bulletImage.y = y - (bulletImage.height / 2);
 					break;
@@ -87,32 +85,32 @@ package game.engine.Object
 			var bulletImage:Bitmap = getImage();
 			switch (direction)
 			{
-				case "up":
+				case "up": 
 					bulletImage.y -= speed * 2;
 					break;
-				case "upLeft":
+				case "upLeft": 
 					bulletImage.x -= speed * 2;
 					bulletImage.y -= speed * 2;
 					break;
-				case "upRight":
+				case "upRight": 
 					bulletImage.x += speed * 2;
 					bulletImage.y -= speed * 2;
 					break;
-				case "down":
+				case "down": 
 					bulletImage.y += speed * 2;
 					break;
-				case "downLeft":
+				case "downLeft": 
 					bulletImage.x -= speed * 2;
 					bulletImage.y += speed * 2;
 					break;
-				case "downRight":
+				case "downRight": 
 					bulletImage.x += speed * 2;
 					bulletImage.y += speed * 2;
 					break;
-				case "left":
+				case "left": 
 					bulletImage.x -= speed * 2;
 					break;
-				case "right":
+				case "right": 
 					bulletImage.x += speed * 2;
 					break;
 			}

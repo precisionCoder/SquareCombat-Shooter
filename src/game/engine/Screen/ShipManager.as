@@ -1,30 +1,22 @@
-package game.engine.Screen
+package game.engine.screen
 {
-	import game.engine.Object.Bullet;
-	import game.engine.Object.EnemyShip;
-	import game.engine.Object.HeroShip;
+	import game.engine.object.Bullet;
+	import game.engine.object.EnemyShip;
+	import game.engine.object.HeroShip;
 	import flash.media.Sound;
+	import game.engine.assets.SoundManager;
 	
 	/**
 	 * Performs operations on ships
 	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class ShipManager
 	{
-		//Add hero image
-		[Embed(source="../../sounds/EnemyDeath.mp3")]
-		private var enemyDeathEmbedSound:Class;
-		private var enemyDeathSound:Sound = new enemyDeathEmbedSound();
-		
-		public function ShipManager()
-		{
-			//Empty
-		}
-		
 		//Handles collisions of the player's ship and enemy ships
 		public function handleShipCollision(heroShip:HeroShip, enemyShipArray:Array, screenManager:ScreenManager):void
 		{
@@ -34,6 +26,7 @@ package game.engine.Screen
 				enemyShip.takeDamage(10);
 				if (enemyShip.getDead())
 				{
+					SoundManager.playCollision();
 					heroShip.addScore(1);
 					screenManager.removeEnemyShipFromScreen(enemyShip.getEnemyShipId());
 				}
@@ -46,7 +39,7 @@ package game.engine.Screen
 			enemyShip.takeDamage(bullet.getDamage());
 			if (enemyShip.getDead())
 			{
-				enemyDeathSound.play();
+				SoundManager.playEnemyDeath();
 				heroShip.addScore(1);
 				screenManager.removeEnemyShipFromScreen(enemyShip.getEnemyShipId());
 			}

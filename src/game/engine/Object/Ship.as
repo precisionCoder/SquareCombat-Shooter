@@ -1,4 +1,4 @@
-package game.engine.Object
+package game.engine.object
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -8,13 +8,11 @@ package game.engine.Object
 	 * The ship class is a superclass inherited by both enemy and hero ships,
 	 * it provides all the basic information and functionality that ships require
 	 *
-	 * "A ship is power, power is good, let's make ourselves the most powerful men in the galaxy!"
-	 * -Krasmak the Cruel
-	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class Ship extends GameObject
 	{

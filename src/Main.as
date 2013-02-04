@@ -12,7 +12,8 @@ package
 	import flash.utils.Timer;
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
-	import game.engine.Main.ShooterGameManager;
+	import game.engine.main.ShooterGameManager;
+	import game.engine.assets.StartScreenImageManager;
 	
 	//My Classes
 	
@@ -35,7 +36,7 @@ package
 	
 	public class Main extends Sprite
 	{
-		private var gameEngine:ShooterGameManager;
+		private var gameEngine:ShooterGameManager;		
 		
 		//Main
 		public function Main():void

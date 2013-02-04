@@ -1,22 +1,20 @@
-package game.engine.Movement
+package game.engine.movement
 {
 	import flash.display.Bitmap;
-	import game.engine.Object.HeroShip;
-	import game.engine.Screen.CollisionDetector;
-	import game.engine.Screen.ScreenManager;
+	import game.engine.object.HeroShip;
+	import game.engine.screen.CollisionDetector;
+	import game.engine.screen.ScreenManager;
 	
 	/**
 	 * Handles all the movement for the hero's ship based on the ships speed
 	 * Checks for collisions and reverses the movement if a collision occurs, then
 	 * calls the normalizer to make sure the position is correct for the direction
 	 *
-	 * "Maneuverability is the key to most battles, never underestimate it!"
-	 * -Markar the Mighty
-	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class HeroMovement
 	{

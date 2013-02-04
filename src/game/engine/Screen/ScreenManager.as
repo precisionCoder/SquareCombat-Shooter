@@ -1,8 +1,10 @@
-package game.engine.Screen
+package game.engine.screen
 {
-	import game.engine.Object.Bullet;
-	import game.engine.Object.EnemyShip;
-	import game.engine.Object.HeroShip;
+	import flash.media.Sound;
+	import game.engine.object.Bullet;
+	import game.engine.object.EnemyShip;
+	import game.engine.object.HeroShip;
+	import game.engine.assets.SoundManager;
 	
 	/**
 	 * Contains a list of all of the objects that are currently on the screen as well as functions
@@ -10,8 +12,9 @@ package game.engine.Screen
 	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class ScreenManager
 	{
@@ -72,6 +75,7 @@ package game.engine.Screen
 					enemy.takeDamage(10);
 					if (enemy.getDead())
 					{
+						SoundManager.playCollision();
 						heroShip.addScore(1);
 						enemyShipArray.splice(arrayIndex, 1);
 					}

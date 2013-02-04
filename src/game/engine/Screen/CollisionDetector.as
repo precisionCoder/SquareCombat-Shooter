@@ -1,34 +1,27 @@
-package game.engine.Screen
+package game.engine.screen
 {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.geom.Point;
-	import game.engine.Object.Bullet;
-	import game.engine.Object.EnemyShip;
-	import game.engine.Object.GameObject;
-	import game.engine.Object.HeroShip;
-	import game.engine.Object.Ship;
+	import game.engine.object.Bullet;
+	import game.engine.object.EnemyShip;
+	import game.engine.object.GameObject;
+	import game.engine.object.HeroShip;
+	import game.engine.object.Ship;
 	
 	/**
 	 * This class contains an array of all of the obstacles currently on the screen
 	 * This currently includes just the enemy ships and the player's ship, but may
 	 * expand as more objects are added to the game.
 	 *
-	 * "If it wasn't for obstacles we could do anything, go anywhere!"
-	 * Markar the Mighty
-	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class CollisionDetector
 	{
-		public function CollisionDetector()
-		{
-			//Empty
-		}
-		
 		/**
 		 * Check all of the enemy ships for collisions with the hero's ship
 		 * will return true if the heroShip collides with a ship
@@ -62,11 +55,11 @@ package game.engine.Screen
 			var outOfBounds:Boolean = false;
 			
 			//Checks if image is out of bounds on the x coordinate
-			if (x + (image.height/2) >= 650)
+			if (x + (image.height / 2) >= 650)
 			{
 				outOfBounds = true;
 			}
-			if (x - (image.height/2) <= 0)
+			if (x - (image.height / 2) <= 0)
 			{
 				outOfBounds = true;
 			}
@@ -76,7 +69,7 @@ package game.engine.Screen
 			{
 				outOfBounds = true;
 			}
-			if (y - (image.height/2) <= 0)
+			if (y - (image.height / 2) <= 0)
 			{
 				outOfBounds = true
 			}

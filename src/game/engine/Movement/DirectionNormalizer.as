@@ -1,7 +1,7 @@
-package game.engine.Movement
+package game.engine.movement
 {
 	import flash.display.Bitmap;
-	import game.engine.Object.Ship;
+	import game.engine.object.Ship;
 	
 	/**
 	 * This class controls the placement of the ship image based on it's direction
@@ -9,19 +9,14 @@ package game.engine.Movement
 	 * The Ships have an absolute X and Y value that is the point at the middle of the image and this class
 	 * normalizes their position on the screen based on their direction and x and y absolute coordinates.
 	 *
-	 * "On my home planet they tried to Normalize me... That was the first planet I destroyed once I put together my fleet. Hah!"
-	 * Krasmak the Cruel
-	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class DirectionNormalizer
 	{
-		public function DirectionNormalizer()
-		{
-		}
 		
 		public static function normalize(ship:Ship):void
 		{
@@ -32,42 +27,42 @@ package game.engine.Movement
 			
 			switch (direction)
 			{
-				case "up":
+				case "up": 
 					image.x = absoluteX - (image.width / 2);
 					image.y = absoluteY - (image.height / 2);
 					image.rotation = 0;
 					break;
-				case "down":
+				case "down": 
 					image.x = absoluteX + (image.width / 2);
 					image.y = absoluteY + (image.height / 2);
 					image.rotation = 180;
 					break;
-				case "upLeft":
+				case "upLeft": 
 					image.x = absoluteX - (image.width / 2);
 					image.y = absoluteY;
 					image.rotation = -45;
 					break;
-				case "upRight":
+				case "upRight": 
 					image.x = absoluteX;
 					image.y = absoluteY - (image.width / 2);
 					image.rotation = 45;
 					break;
-				case "left":
+				case "left": 
 					image.x = absoluteX - (image.width / 2);
 					image.y = absoluteY + (image.height / 2);
 					image.rotation = -90;
 					break
-				case "right":
+				case "right": 
 					image.x = absoluteX + (image.width / 2);
 					image.y = absoluteY - (image.height / 2);
 					image.rotation = 90;
 					break;
-				case "downLeft":
+				case "downLeft": 
 					image.x = absoluteX;
 					image.y = absoluteY + (image.height / 2);
 					image.rotation = -135;
 					break;
-				case "downRight":
+				case "downRight": 
 					image.x = absoluteX + (image.width / 2);
 					image.y = absoluteY;
 					image.rotation = 135;

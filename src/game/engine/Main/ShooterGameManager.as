@@ -1,4 +1,4 @@
-package game.engine.Main
+package game.engine.main
 {
 	import flash.display.Stage;
 	import flash.display.Sprite;
@@ -17,13 +17,17 @@ package game.engine.Main
 	import flash.media.Sound;
 	
 	//My Classes
-	import game.engine.Screen.CollisionDetector;
-	import game.engine.Screen.ScreenManager;
-	import game.engine.Input.KeyboardControl;
-	import game.engine.Object.HeroShip;
-	import game.engine.Object.EnemyShip;
-	import game.engine.Movement.DirectionNormalizer;
-	import game.engine.Screen.ScreenLoader;
+	import game.engine.screen.CollisionDetector;
+	import game.engine.screen.ScreenManager;
+	import game.engine.input.KeyboardControl;
+	import game.engine.object.HeroShip;
+	import game.engine.object.EnemyShip;
+	import game.engine.movement.DirectionNormalizer;
+	import game.engine.screen.ScreenLoader;
+	import game.engine.assets.StartScreenImageManager;
+	import game.engine.assets.GameScreenImageManager;
+	import game.engine.assets.GameOverScreenImageManager;
+	import game.engine.assets.SoundManager;
 	
 	/**
 	 * This is the main part of the shooter game, it launches the various screens, initializes needed classes,
@@ -31,31 +35,12 @@ package game.engine.Main
 	 *
 	 * @author William Drescher
 	 *
-	 * Copyright (c) 2012 William Drescher
+	 * Copyright (c) 2012-2013 William Drescher
 	 * Licensed under the MIT License, a copy of this license should be included with this software
+	 * All artistic content of this game including images and sounds have all rights reserved
 	 */
 	public class ShooterGameManager
 	{
-		//Add enemy image
-		[Embed(source="../../images/BasicEnemy.png")]
-		private var enemyEmbedImage:Class;
-		private var enemyImage:Bitmap = new enemyEmbedImage();
-		
-		//Add hero image
-		[Embed(source="../../images/BasicHero.png")]
-		private var heroEmbedImage:Class;
-		private var heroImage:Bitmap = new heroEmbedImage();
-		
-		//Add hero image
-		[Embed(source="../../sounds/GameStartSound.mp3")]
-		private var gameStartEmbedSound:Class;
-		private var gameStartSound:Sound = new gameStartEmbedSound();
-		
-		//Add hero image
-		[Embed(source="../../sounds/GameOverSound.mp3")]
-		private var gameOverEmbedSound:Class;
-		private var gameOverSound:Sound = new gameOverEmbedSound();
-		
 		//Add game engine components
 		private var gameCollisionDetector:CollisionDetector;
 		private var screenManager:ScreenManager;
@@ -91,6 +76,9 @@ package game.engine.Main
 		
 		private function initGame(spawnTime:int):void
 		{
+			StartScreenImageManager.init();
+			GameScreenImageManager.init();
+			GameOverScreenImageManager.init();
 			loadScreen();
 			initPlayer();
 			
@@ -117,7 +105,7 @@ package game.engine.Main
 			gameArea = screenLoader.loadGameScreen();
 			screenArea.addChild(gameArea);
 			var gameFrame:Sprite = screenLoader.loadGameFrame();
-			//screenArea.addChild(gameFrame);
+			screenArea.addChild(gameFrame);
 			topBar = screenLoader.loadTopBar();
 			screenArea.addChild(topBar)
 			healthBar = screenLoader.loadHealthBar();
@@ -134,6 +122,7 @@ package game.engine.Main
 		private function initPlayer():void
 		{
 			//Create player
+			var heroImage:Bitmap = new Bitmap(GameScreenImageManager.getBasicHeroImage());
 			heroShip = new HeroShip(heroImage, 5, 2, gameArea);
 			var heroX:uint = Math.round((gameArea.width - (heroImage.width / 2)) / 2);
 			var heroY:uint = Math.round((gameArea.height - (heroImage.height / 2)) / 2);
@@ -149,11 +138,12 @@ package game.engine.Main
 		{
 			if (!gameInitialized)
 			{
+				SoundManager.playWelcomeToSquareShooter();
 				initGame(spawnTime);
 			}
 			else
 			{
-				gameStartSound.play();
+				SoundManager.playGameStart();
 				resetGame();
 				screenArea.removeChild(coverScreen);
 				heroKeyboardControl.initializeKeyboardControl(this.stage);
@@ -210,7 +200,7 @@ package game.engine.Main
 			//Check that game is still running
 			if (heroIsDead())
 			{
-				gameOverSound.play();
+				SoundManager.playGameOver();
 				gameRunning = false;
 			}
 			
@@ -232,9 +222,7 @@ package game.engine.Main
 				//Add life images
 				for (i = 0; i < lives; i++)
 				{
-					var heroImageData:BitmapData = heroShip.getImage().bitmapData;
-					var myClone:BitmapData = heroImageData.clone();
-					var lifeImage:Bitmap = new Bitmap(myClone);
+					var lifeImage:Bitmap = new Bitmap(GameScreenImageManager.getBasicHeroImage());
 					lifeImage.width = lifeImage.width / 1.5;
 					lifeImage.height = lifeImage.height / 1.5;
 					lifeImage.x = lifePosition;
@@ -261,18 +249,16 @@ package game.engine.Main
 		//the same can be done with health but is not currently implemented since it makes it more fun not to have it
 		private function spawnTick(e:TimerEvent):void
 		{
-			var enemyImageData:BitmapData = enemyImage.bitmapData;
-			var myClone:BitmapData = enemyImageData.clone();
-			var myEnemyClone:Bitmap = new Bitmap(myClone);
-			var enemyShip:EnemyShip = new EnemyShip(myEnemyClone, 5, 1, gameArea);
-			var spawnLocation:Point = chooseSpawnPoint();
+			var enemyImage:Bitmap = new Bitmap(GameScreenImageManager.getBasicEnemyImage());
+			var enemyShip:EnemyShip = new EnemyShip(enemyImage, 5, 1, gameArea);
+			var spawnLocation:Point = chooseSpawnPoint(enemyImage);
 			enemyShip.addToScreen(spawnLocation.x, spawnLocation.y);
 			screenManager.addEnemyShipToScreen(enemyShip);
 			difficulty += 0.01;
 		}
 		
 		//Randomly decide a spawnpoint on a wall for a new enemy to spawn
-		private function chooseSpawnPoint():Point
+		private function chooseSpawnPoint(enemyImage:Bitmap):Point
 		{
 			var x:int = Math.floor(Math.random() * (gameArea.width + 1));
 			var y:int = Math.floor(Math.random() * (gameArea.height + 1));
@@ -282,19 +268,19 @@ package game.engine.Main
 			
 			switch (wall)
 			{
-				case 1:
+				case 1: 
 					x = 0;
 					break;
 				
-				case 2:
+				case 2: 
 					x = gameArea.width - enemyImage.width;
 					break;
 				
-				case 3:
+				case 3: 
 					y = 0;
 					break;
 				
-				case 4:
+				case 4: 
 					y = gameArea.height - enemyImage.height;
 					break;
 			}
