@@ -138,7 +138,6 @@ package game.engine.main
 		{
 			if (!gameInitialized)
 			{
-				SoundManager.playWelcomeToSquareShooter();
 				initGame(spawnTime);
 			}
 			else

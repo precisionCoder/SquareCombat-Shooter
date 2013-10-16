@@ -34,10 +34,6 @@ package game.engine.assets
 		private static var shootEmbedSound:Class;
 		private static var shootSound:Sound = new shootEmbedSound();
 		
-		[Embed(source="../../sounds/WelcomeToSquareShooter.mp3")]
-		private static var welcomeToSquareShooterEmbedSound:Class;
-		private static var welcomeToSquareShooterSound:Sound = new welcomeToSquareShooterEmbedSound();
-		
 		private static var currentSound:SoundChannel = new SoundChannel();
 		
 		public static function playCollision():void
@@ -68,12 +64,6 @@ package game.engine.assets
 		{
 			currentSound.stop();
 			currentSound = shootSound.play();
-		}
-		
-		public static function playWelcomeToSquareShooter():void
-		{
-			currentSound.stop();
-			currentSound = welcomeToSquareShooterSound.play();
 		}
 	
 	}
